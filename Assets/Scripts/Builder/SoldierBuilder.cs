@@ -36,7 +36,9 @@ public class SoldierBuilder : ICharacterBuilder
 
     public override void AddOnClickScript()
     {
-        //soldier
+        SoldierOnClick Script = m_BuildParam.NewCharacter.GetGameObject().AddComponent<SoldierOnClick>();
+        Script.Soldier = m_BuildParam.NewCharacter as ISoldier;
+
     }
 
     public override void AddWeapon()
@@ -49,7 +51,7 @@ public class SoldierBuilder : ICharacterBuilder
     {
         IAssetFactory AssetFactory = PBDFactory.GetAssetFactory();
         //GameObject SoldierGameObject = AssetFactory.load
-        
+
     }
 
     public override void SetBuildParam(ICharacterBuildParam theParam)
@@ -64,4 +66,6 @@ public class SoldierBuilder : ICharacterBuilder
 
         //SoldierAttr theSoldierAttr = theAttrFactory.GetSoldierAttr(AttrID);
     }
+
+
 }

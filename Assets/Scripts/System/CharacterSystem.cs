@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class CharacterSystem : IGameSystem
@@ -8,7 +9,7 @@ public class CharacterSystem : IGameSystem
     private List<ICharacter> m_Enemys = new List<ICharacter>();
 
 
-    public CharacterSystem(PBaseDefenseGame PBDGame): base(PBDGame)
+    public CharacterSystem(PBaseDefenseGame PBDGame) : base(PBDGame)
     {
         m_PBDGame = PBDGame;
     }
@@ -76,11 +77,6 @@ public class CharacterSystem : IGameSystem
 
     }
 
-    public int GetEnemyCount()
-    {
-        return m_Enemys.Count;
-    }
-
     private void UpdateCharacter()
     {
         foreach (ICharacter Character in m_Soldiers)
@@ -113,6 +109,36 @@ public class CharacterSystem : IGameSystem
 
     public override void Update()
     {
-        
+
+    }
+
+    public int GetSoldierCount()
+    {
+        return m_Soldiers.Count; ;
+    }
+
+    public int GetSoldierCount(ENUM_Soldier emSoldier)
+    {
+        int Count = 0;
+        foreach (ISoldier pSoldier in m_Soldiers)
+        {
+            if (pSoldier == null)
+            {
+                continue;
+            }
+
+            if (pSoldier.GetSoldierType() == emSoldier)
+            {
+                Count++;
+            }
+
+            return Count;
+        }
+        return m_Soldiers.Count;
+    }
+
+    public int GetEnemyCount()
+    {
+        return m_Enemys.Count;
     }
 }

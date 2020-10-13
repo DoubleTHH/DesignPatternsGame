@@ -72,7 +72,7 @@ public abstract class ISoldier : ICharacter
                     return;
                 }
 
-                if (!TargetInAttackRange(m_AttackTarget) )
+                if (!TargetInAttackRange(m_AttackTarget))
                 {
                     m_ChaseTarget = m_AttackTarget;
                     m_AiState = ENUM_AI_State.Chase;
@@ -117,6 +117,11 @@ public abstract class ISoldier : ICharacter
     float GetTargetDist(ICharacter theCharacter)
     {
         return 0.0f;
+    }
+
+    public ENUM_Soldier GetSoldierType()
+    {
+        return ENUM_Soldier.Null;
     }
 
     public abstract void DoPlayHitSound();

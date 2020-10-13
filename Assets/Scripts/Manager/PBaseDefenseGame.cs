@@ -76,10 +76,6 @@ public class PBaseDefenseGame
         return m_bGameOver;
     }
 
-    public int GetEnemyCount()
-    {
-        return 0;
-    }
 
     //public int GetUnitCount()
     //{
@@ -116,8 +112,16 @@ public class PBaseDefenseGame
         foreach (RaycastHit hit in hits)
         {
             CampOnClick CampClickScript = hit.transform.gameObject.GetComponent<CampOnClick>();
-            if (CampClickScript !=null)
+            if (CampClickScript != null)
             {
+                return;
+            }
+
+
+            SoldierOnClick SoldierOnClickScript = hit.transform.gameObject.GetComponent<SoldierOnClick>();
+            if (SoldierOnClickScript != null)
+            {
+                SoldierOnClickScript.OnClick();
                 return;
             }
         }
@@ -150,7 +154,7 @@ public class PBaseDefenseGame
 
     }
 
-    public void NotifyGameEvent(ENUM_GameEvent newStage,ICharacter character)
+    public void NotifyGameEvent(ENUM_GameEvent newStage, ICharacter character)
     {
 
     }
@@ -166,8 +170,8 @@ public class PBaseDefenseGame
         m_GameEventSystem.RegisterObserver(ENUM_GameEvent.EnemyKilled, new EnemyKilledObserverUI(this));
 
         ComboObserver theComboObserver = new ComboObserver(this);
-        m_GameEventSystem.RegisterObserver(ENUM_GameEvent.EnemyKilled,theComboObserver);
-        m_GameEventSystem.RegisterObserver(ENUM_GameEvent.SoldierKilled,theComboObserver);
+        m_GameEventSystem.RegisterObserver(ENUM_GameEvent.EnemyKilled, theComboObserver);
+        m_GameEventSystem.RegisterObserver(ENUM_GameEvent.SoldierKilled, theComboObserver);
 
 
 
@@ -181,5 +185,47 @@ public class PBaseDefenseGame
     public bool CostAP(int cost)
     {
         return false;
+    }
+
+    private void SaveData()
+    {
+        AchievementSaveData SaveData = m_AchievementSystem.CreateSaveData();
+        SaveData.SaveData();
+    }
+
+
+    private AchievementSaveData LoadData()
+    {
+        AchievementSaveData OldData = new AchievementSaveData();
+        OldData.LoadData();
+        m_AchievementSystem.SetSaveData(OldData);
+        return OldData;
+    }
+
+    public void ShowSoldierInfo(ISoldier soldier)
+    {
+
+    }
+
+
+    public int GetSoldierCount()
+    {
+        if (m_CharacterSystem != null)
+        {
+            return m_CharacterSystem.GetSoldierCount();
+        }
+
+        return 0;
+    }
+
+
+    public int GetEnemyCount()
+    {
+        if (m_CharacterSystem != null)
+        {
+            return m_CharacterSystem.GetEnemyCount();
+        }
+
+        return 0;
     }
 }

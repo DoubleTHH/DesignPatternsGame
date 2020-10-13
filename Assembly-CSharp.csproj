@@ -95,14 +95,15 @@
     <Compile Include="Assets\Scripts\Character\SoldierAttr.cs" />
     <Compile Include="Assets\Scripts\Character\SoldierAttrStrategy.cs" />
     <Compile Include="Assets\Scripts\Character\SoldierCaptain.cs" />
+    <Compile Include="Assets\Scripts\Character\SoldierOnClick.cs" />
     <Compile Include="Assets\Scripts\Character\SoldierRookie.cs" />
     <Compile Include="Assets\Scripts\Character\SoldierSergeant.cs" />
     <Compile Include="Assets\Scripts\Command\ITrainCommand.cs" />
     <Compile Include="Assets\Scripts\Command\TrainSoldierCommand.cs" />
-    <Compile Include="Assets\Scripts\Common\AchievementSaveData.cs" />
     <Compile Include="Assets\Scripts\Common\G.cs" />
     <Compile Include="Assets\Scripts\Common\UITool.cs" />
     <Compile Include="Assets\Scripts\Common\UnityTool.cs" />
+    <Compile Include="Assets\Scripts\Data\AchievementSaveData.cs" />
     <Compile Include="Assets\Scripts\Factory\AttrFactory.cs" />
     <Compile Include="Assets\Scripts\Factory\CharacterFactory.cs" />
     <Compile Include="Assets\Scripts\Factory\EnemyFactory.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Assets\Scripts\UI\GameStateInfoUI.cs" />
     <Compile Include="Assets\Scripts\UI\IUserInterface.cs" />
     <Compile Include="Assets\Scripts\UI\SoldierInfoUI.cs" />
+    <Compile Include="Assets\Scripts\Visitor\ICharacterVisitor.cs" />
     <Compile Include="Assets\Scripts\Weapon\IWeapon.cs" />
     <Compile Include="Assets\Scripts\Weapon\WeaponAttr.cs" />
     <Compile Include="Assets\Scripts\Weapon\WeaponGun.cs" />

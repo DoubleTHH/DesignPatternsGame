@@ -11,6 +11,8 @@ public class AchievementSystem : IGameSystem
     private int m_StageLv = 0;
     private bool m_KillOgreEquipRocket = false;
 
+    private AchievementSaveData m_LastSaveData = null;
+
 
     public AchievementSystem(PBaseDefenseGame PBDGame) : base(PBDGame)
     {
@@ -45,7 +47,7 @@ public class AchievementSystem : IGameSystem
         m_StageLv = NowStageLevel;
     }
 
-    public void NotifyGameEvent(ENUM_GameEvent emGameEvent, System.Object Param1,System.Object Param2)
+    public void NotifyGameEvent(ENUM_GameEvent emGameEvent, System.Object Param1, System.Object Param2)
     {
         switch (emGameEvent)
         {
@@ -109,5 +111,24 @@ public class AchievementSystem : IGameSystem
     public override void Update()
     {
         base.Update();
+    }
+
+
+    public AchievementSaveData CreateSaveData()
+    {
+        AchievementSaveData SaveData = new AchievementSaveData();
+
+        SaveData.EnemyKilledCount = Mathf.Max(m_EnemyKilledCount, m_LastSaveData.EnemyKilledCount);
+        SaveData.SoldierKilledCount = Mathf.Max(m_SoldierKilledCount, m_LastSaveData.SoldierKilledCount);
+        SaveData.StageLv = Mathf.Max(m_StageLv, m_LastSaveData.StageLv);
+
+        return SaveData;
+
+    }
+
+
+    public void SetSaveData(AchievementSaveData SaveData)
+    {
+        m_LastSaveData = SaveData;
     }
 }
