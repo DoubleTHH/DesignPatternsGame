@@ -1,49 +1,55 @@
-﻿using System;
+﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
+// 場景狀態控制者
 public class SceneStateController
 {
-    ISceneState m_State;
-    bool m_bRunBegin = false;
-    public SceneStateController() { }
-    static AsyncOperation asyncOperation;
+	private ISceneState m_State;
+	private bool m_bRunBegin = false;
 
-    public void SetState(ISceneState State, string LoadSceneName)
-    {
-        m_bRunBegin = false;
+	public SceneStateController()
+	{ }
 
-        LoadScene(LoadSceneName);
+	// 設定狀態
+	public void SetState(ISceneState State, string LoadSceneName)
+	{
+		//Debug.Log ("SetState:"+State.ToString());
+		m_bRunBegin = false;
 
-        if (m_State != null)
-            m_State.StateEnd();
+		// 載入場景
+		LoadScene(LoadSceneName);
 
-        m_State = State;
+		// 通知前一個State結束
+		if (m_State != null)
+			m_State.StateEnd();
 
-    }
+		// 設定
+		m_State = State;
+	}
 
-    void LoadScene(string LoadSceneName)
-    {
-        if (LoadSceneName == null || LoadSceneName.Length == 0)
-            return;
+	// 載入場景
+	private void LoadScene(string LoadSceneName)
+	{
+		if (LoadSceneName == null || LoadSceneName.Length == 0)
+			return;
+		Application.LoadLevel(LoadSceneName);
+	}
 
-        asyncOperation = SceneManager.LoadSceneAsync(LoadSceneName);
-    }
+	// 更新
+	public void StateUpdate()
+	{
+		// 是否還在載入
+		if (Application.isLoadingLevel)
+			return;
 
-    public void StateUpdate()
-    {
-        if (!asyncOperation.isDone)
-            return;
-        if (m_State != null && m_bRunBegin ==false)
-        {
-            m_State.StateBegin();
-            m_bRunBegin = true;
-        }
+		// 通知新的State開始
+		if (m_State != null && m_bRunBegin == false)
+		{
+			m_State.StateBegin();
+			m_bRunBegin = true;
+		}
 
-        if (m_State !=null)
-            m_State.StateUpdate();
-    }
+		if (m_State != null)
+			m_State.StateUpdate();
+	}
 }

@@ -1,15 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
-public class IWeaponFactory 
+// 產生武器工廠界面
+public abstract class IWeaponFactory
 {
-    protected IWeapon pWeapon;
-    protected int AttrID;
-
-    protected virtual IWeapon CreateWeapon(ENUM_Weapon emWeapon)
-    {
-        return new WeaponGun();
-    }
-    
+	// 建立武器
+	public abstract IWeapon CreateWeapon(ENUM_Weapon emWeapon);
 }
+

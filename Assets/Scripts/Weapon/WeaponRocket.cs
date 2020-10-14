@@ -1,19 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 public class WeaponRocket : IWeapon
 {
-    public WeaponRocket() { }
+	public WeaponRocket()
+	{
+		m_emWeaponType = ENUM_Weapon.Rocket;
+	}
 
-    protected override void DoShowBulletEffect(ICharacter theTarget)
-    {
-        ShowBulletEffect(theTarget.GetPosition(), 0.8f, 0.5f);
+	// 顯示武器子彈特效
+	protected override void DoShowBulletEffect(ICharacter theTarget)
+	{
+		ShowBulletEffect(theTarget.GetPosition(), 0.8f, 0.5f);
+	}
 
-    }
+	// 顯示音效
+	protected override void DoShowSoundEffect()
+	{
+		ShowSoundEffect("RocketShot");
+	}
 
-    protected override void DoShowSoundEffect()
-    {
-        ShowSoundEffect("RocketShot");
-    }
 }

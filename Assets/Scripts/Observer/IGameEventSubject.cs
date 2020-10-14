@@ -1,32 +1,34 @@
-﻿using System.Collections;
+﻿using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine;
 
-public abstract class IGameEventSubject
+// 遊戲事件主題
+public class IGameEventSubject
 {
-    private List<IGameEventObserver> m_Observers = new List<IGameEventObserver>();
-    private System.Object m_Param = null;
+	private List<IGameEventObserver> m_Observers = new List<IGameEventObserver>(); // 觀測者
+	private System.Object m_Param = null;   // 發生事件時附加的參數
 
-    public void Attach(IGameEventObserver theObserver)
-    {
-        m_Observers.Add(theObserver);
-    }
+	// 加入
+	public void Attach(IGameEventObserver theObserver)
+	{
+		m_Observers.Add(theObserver);
+	}
 
-    public void Detach(IGameEventObserver theObserver)
-    {
-        m_Observers.Remove(theObserver);
-    }
+	// 取消
+	public void Detach(IGameEventObserver theObserver)
+	{
+		m_Observers.Remove(theObserver);
+	}
 
-    public void Notify()
-    {
-        foreach (IGameEventObserver theObserver in m_Observers)
-        {
-            theObserver.Update();
-        }
-    }
+	// 通知
+	public void Notify()
+	{
+		foreach (IGameEventObserver theObserver in m_Observers)
+			theObserver.Update();
+	}
 
-    public virtual void SetParam(System.Object Param)
-    {
-        m_Param = Param;
-    }
+	// 設定參數
+	public virtual void SetParam(System.Object Param)
+	{
+		m_Param = Param;
+	}
 }

@@ -1,43 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
+// 上尉
 public class SoldierCaptain : ISoldier
 {
-    // Start is called before the first frame update
-    void Start()
-    {
+	public SoldierCaptain()
+	{
+		m_emSoldier = ENUM_Soldier.Captain;
+		m_AssetName = "Soldier3";
+		m_IconSpriteName = "CaptainIcon";
+		m_AttrID = 3;
+	}
 
-    }
+	// 播放音效
+	public override void DoPlayKilledSound()
+	{
+		PlaySound("CaptainDeath");
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
+	// 播放特效
+	public override void DoShowKilledEffect()
+	{
+		PlayEffect("CaptainDeadEffect");
+	}
 
-    }
+	// 執行Visitor
+	public override void RunVisitor(ICharacterVisitor Visitor)
+	{
+		Visitor.VisitSoldierCaptain(this);
+	}
 
-    public void SetGameObject(GameObject go)
-    {
-
-    }
-
-    public void SetCharacterAttr(SoldierAttr soldierAttr)
-    {
-
-    }
-
-    public void SetAI(SoldierAI soldierAI)
-    {
-
-    }
-
-    public override void DoPlayHitSound()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void DoShowHitEffect()
-    {
-        throw new System.NotImplementedException();
-    }
 }

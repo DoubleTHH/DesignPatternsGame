@@ -1,13 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
-public abstract class IAttrStrategy : MonoBehaviour
+// 角色數值計算界面
+public abstract class IAttrStrategy
 {
-    public abstract void InitAttr(ICharacterAttr CharacterAttr);
+	// 初始的數值
+	public abstract void InitAttr(ICharacterAttr CharacterAttr);
 
-    public abstract int GetAtkPlusValue(ICharacterAttr CharacterAttr);
+	// 攻擊加乘
+	public abstract int GetAtkPlusValue(ICharacterAttr CharacterAttr);
 
-    public abstract int GetDmgDescValue(ICharacterAttr CharacterAttr);
-
+	// 取得減傷害值
+	public abstract int GetDmgDescValue(ICharacterAttr CharacterAttr);
 }

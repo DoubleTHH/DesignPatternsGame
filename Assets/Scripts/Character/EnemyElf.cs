@@ -6,11 +6,12 @@ public class EnemyElf : IEnemy
 {
     public override void DoPlayHitSound()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("未定义 EnemyElf 的 DoPlayHitSound()");
     }
 
     public override void DoShowHitEffect()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("未定义EnemyElf 的 DoShowHitEffect()");
+
     }
 }

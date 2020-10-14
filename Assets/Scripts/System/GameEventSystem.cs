@@ -1,80 +1,86 @@
-﻿using System.Collections;
+﻿using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine;
 
+// 遊戲事件
 public enum ENUM_GameEvent
 {
-    Null = 0,
-    EnemyKilled,
-    SoldierKilled,
-    SoldierUpgrate,
-    NewStage,
+	Null = 0,
+	EnemyKilled = 1,// 敵方單位陣亡
+	SoldierKilled = 2,// 玩家單位陣亡
+	SoldierUpgate = 3,// 玩家單位升級
+	NewStage = 4,// 新關卡
 }
 
+
+// 遊戲事件系統
 public class GameEventSystem : IGameSystem
 {
-    private Dictionary<ENUM_GameEvent, IGameEventSubject> m_GameEvents = new Dictionary<ENUM_GameEvent, IGameEventSubject>();
+	private Dictionary<ENUM_GameEvent, IGameEventSubject> m_GameEvents = new Dictionary<ENUM_GameEvent, IGameEventSubject>();
 
+	public GameEventSystem(PBaseDefenseGame PBDGame) : base(PBDGame)
+	{
+		Initialize();
+	}
 
-    public GameEventSystem(PBaseDefenseGame PBDGame) : base(PBDGame)
-    {
-        Initialize();
-    }
+	// 釋放
+	public override void Release()
+	{
+		m_GameEvents.Clear();
+	}
 
-    public override void Release()
-    {
-        m_GameEvents.Clear();
-    }
+	// 替某一主題註冊一個觀測者
+	public void RegisterObserver(ENUM_GameEvent emGameEvnet, IGameEventObserver Observer)
+	{
+		// 取得事件
+		IGameEventSubject Subject = GetGameEventSubject(emGameEvnet);
+		if (Subject != null)
+		{
+			Subject.Attach(Observer);
+			Observer.SetSubject(Subject);
+		}
+	}
 
-    public void RegisterObserver(ENUM_GameEvent emGameEvent, IGameEventObserver Observer)
-    {
-        //IGameEventSubject Subject = ge
-    }
+	// 註冊一個事件
+	private IGameEventSubject GetGameEventSubject(ENUM_GameEvent emGameEvnet)
+	{
+		// 是否已經存在
+		if (m_GameEvents.ContainsKey(emGameEvnet))
+			return m_GameEvents[emGameEvnet];
 
-    private IGameEventSubject GetGameEventSubject(ENUM_GameEvent emGameEvent)
-    {
-        if (m_GameEvents.ContainsKey(emGameEvent))
-        {
-            return m_GameEvents[emGameEvent];
-        }
+		// 產生對映的GameEvent
+		IGameEventSubject pSujbect = null;
+		switch (emGameEvnet)
+		{
+			case ENUM_GameEvent.EnemyKilled:
+				pSujbect = new EnemyKilledSubject();
+				break;
+			case ENUM_GameEvent.SoldierKilled:
+				pSujbect = new SoldierKilledSubject();
+				break;
+			case ENUM_GameEvent.SoldierUpgate:
+				pSujbect = new SoldierUpgateSubject();
+				break;
+			case ENUM_GameEvent.NewStage:
+				pSujbect = new NewStageSubject();
+				break;
+			default:
+				Debug.LogWarning("還沒有針對[" + emGameEvnet + "]指定要產生的Subject類別");
+				return null;
+		}
 
+		// 加入後並回傳
+		m_GameEvents.Add(emGameEvnet, pSujbect);
+		return pSujbect;
+	}
 
-        IGameEventSubject pSubject = null;
-        switch (emGameEvent)
-        {
-            case ENUM_GameEvent.Null:
-                break;
-            case ENUM_GameEvent.EnemyKilled:
-                break;
-            case ENUM_GameEvent.SoldierKilled:
-                break;
-            case ENUM_GameEvent.SoldierUpgrate:
-                break;
-            case ENUM_GameEvent.NewStage:
-                break;
-            default:
-                break;
-        }
+	// 通知一個GameEvent更新
+	public void NotifySubject(ENUM_GameEvent emGameEvnet, System.Object Param)
+	{
+		// 是否存在
+		if (m_GameEvents.ContainsKey(emGameEvnet) == false)
+			return;
+		//Debug.Log("SubjectAddCount["+emGameEvnet+"]");
+		m_GameEvents[emGameEvnet].SetParam(Param);
+	}
 
-
-        m_GameEvents.Add(emGameEvent, pSubject);
-
-        return pSubject;
-    }
-
-
-    public void NotifySubject(ENUM_GameEvent emGameEvent, System.Object Param)
-    {
-        if (!m_GameEvents.ContainsKey(emGameEvent))
-        {
-            return;
-        }
-
-        m_GameEvents[emGameEvent].SetParam(Param);
-    }
-
-    public override void Update()
-    {
-        base.Update();
-    }
 }

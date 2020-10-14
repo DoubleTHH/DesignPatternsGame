@@ -1,20 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
-public abstract class IGameSystem {
+// 遊戲子系統共用界面
+public abstract class IGameSystem
+{
+	protected PBaseDefenseGame m_PBDGame = null;
+	public IGameSystem(PBaseDefenseGame PBDGame)
+	{
+		m_PBDGame = PBDGame;
+	}
 
-    protected PBaseDefenseGame m_PBDGame = null;
-    public IGameSystem (PBaseDefenseGame PBDGame)
-    {
-        m_PBDGame = PBDGame;
-    }
-
-    public virtual void Initialize() { }
-
-    public virtual void Release() { }
-
-    public virtual void Update() { }
-
+	public virtual void Initialize() { }
+	public virtual void Release() { }
+	public virtual void Update() { }
 
 }

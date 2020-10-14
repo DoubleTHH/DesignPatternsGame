@@ -1,18 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 public class WeaponGun : IWeapon
 {
-    public WeaponGun() { }
+	public WeaponGun()
+	{
+		m_emWeaponType = ENUM_Weapon.Gun;
+	}
 
-    protected override void DoShowBulletEffect(ICharacter theTarget)
-    {
-        ShowBulletEffect(theTarget.GetPosition(), 0.03f, 0.2f);
-    }
+	// 顯示武器子彈特效
+	protected override void DoShowBulletEffect(ICharacter theTarget)
+	{
+		ShowBulletEffect(theTarget.GetPosition(), 0.03f, 0.2f);
+	}
 
-    protected override void DoShowSoundEffect()
-    {
-        ShowSoundEffect("GunShot");
-    }
+	// 顯示音效
+	protected override void DoShowSoundEffect()
+	{
+		ShowSoundEffect("GunShot");
+	}
+
+
 }

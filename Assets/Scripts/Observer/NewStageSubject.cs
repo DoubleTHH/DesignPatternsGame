@@ -1,23 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
+// 新的關卡
 public class NewStageSubject : IGameEventSubject
 {
-    private int m_StageCount = 1;
+	private int m_StageCount = 1;
 
-    public NewStageSubject() { }
+	public NewStageSubject()
+	{ }
 
-    public int GetStageCount()
-    {
-        return m_StageCount;
-    }
+	// 目前關卡數
+	public int GetStageCount()
+	{
+		return m_StageCount;
+	}
 
-    public override void SetParam(object Param)
-    {
-        base.SetParam(Param);
-        m_StageCount = (int)Param;
+	// 通知
+	public override void SetParam(System.Object Param)
+	{
+		base.SetParam(Param);
+		m_StageCount = (int)Param;
 
-        Notify();
-    }
+		// 通知
+		Notify();
+	}
 }

@@ -1,24 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
+// 成就觀測Soldier陣亡事件
 public class SoldierKilledObserverAchievement : IGameEventObserver
 {
-    private SoldierKilledSubject m_Subject = null;
-    private AchievementSystem m_AchievementSystem = null;
+	private SoldierKilledSubject m_Subject = null;
+	private AchievementSystem m_AchievementSystem = null;
 
-    public SoldierKilledObserverAchievement(AchievementSystem theAchievementSystem)
-    {
-        m_AchievementSystem = theAchievementSystem;
-    }
+	public SoldierKilledObserverAchievement(AchievementSystem AchievementSystem)
+	{
+		m_AchievementSystem = AchievementSystem;
+	}
 
-    public override void SetSubject(IGameEventSubject Subject)
-    {
-        m_Subject = Subject as SoldierKilledSubject;
-    }
+	// 設定觀察的主題
+	public override void SetSubject(IGameEventSubject Subject)
+	{
+		m_Subject = Subject as SoldierKilledSubject;
+	}
 
-    public override void Update()
-    {
-        m_AchievementSystem.AddEnemyKilledCount();
-    }
+	// 通知Subject被更新
+	public override void Update()
+	{
+		m_AchievementSystem.AddSoldierKilledCount();
+	}
+
 }

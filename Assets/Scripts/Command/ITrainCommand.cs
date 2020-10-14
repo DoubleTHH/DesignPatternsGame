@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
-public abstract class ITrainCommand 
+// 執行訓練命令的介面
+public abstract class ITrainCommand
 {
-    public abstract void Execute();
+	public abstract void Execute();
 }

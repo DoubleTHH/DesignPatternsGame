@@ -1,170 +1,57 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
+// Enemy類型
+public enum ENUM_Enemy
+{
+	Null = 0,
+	Elf = 1,// 精靈
+	Troll = 2,// 山妖
+	Ogre = 3,// 怪物
+	Catpive = 4,// 俘兵
+	Max,
+}
+
+// Enemy角色界面
 public abstract class IEnemy : ICharacter
 {
-    public IEnemy() { }
+	protected ENUM_Enemy m_emEnemyType = ENUM_Enemy.Null;
+
+	public IEnemy()
+	{ }
+
+	public ENUM_Enemy GetEnemyType()
+	{
+		return m_emEnemyType;
+	}
+
+	// 被武器攻擊
+	public override void UnderAttack(ICharacter Attacker)
+	{
+		// 計算傷害值
+		m_Attribute.CalDmgValue(Attacker);
+
+		DoPlayHitSound();// 音效
+		DoShowHitEffect();// 特效 
+
+		// 是否陣亡
+		if (m_Attribute.GetNowHP() <= 0)
+		{
+			Killed();
+		}
+	}
+
+	// 執行Visitor
+	public override void RunVisitor(ICharacterVisitor Visitor)
+	{
+		Visitor.VisitEnemy(this);
+	}
+
+	// 播放音效
+	public abstract void DoPlayHitSound();
+
+	// 播放特效
+	public abstract void DoShowHitEffect();
 
 
-    public override void UnderAttack(ICharacter Attacker)
-    {
-        m_Attribute.CalDmgValue(Attacker);
-
-        DoPlayHitSound();
-        DoShowHitEffect();
-
-        if (m_Attribute.GetNowHP() <=0)
-        {
-            Killed();
-
-
-        }
-
-
-    }
-    public override void UpdateAI(List<ICharacter> Targets)
-    {
-        switch (m_AiState)
-        {
-            case ENUM_AI_State.Idle:
-                if (Targets == null || Targets.Count == 0)
-                {
-                    if (base.m_bSetAttackPosition)
-                        m_AiState = ENUM_AI_State.Move;
-                    return;
-                }
-
-                ICharacter theNearTarget = GetNearTarget(Targets);
-                if (theNearTarget == null)
-                    return;
-
-                if (TargetInAttackRange(theNearTarget))
-                {
-                    m_AttackTarget = theNearTarget;
-                    m_AiState = ENUM_AI_State.Attack;
-                }
-                else
-                {
-                    m_ChaseTarget = theNearTarget;
-                    m_AiState = ENUM_AI_State.Chase;
-                }
-                break;
-            case ENUM_AI_State.Chase:
-                if (m_ChaseTarget == null || m_ChaseTarget.IsKilled())
-                {
-                    m_AiState = ENUM_AI_State.Idle;
-                    return;
-                }
-
-                if (TargetInAttackRange(m_ChaseTarget))
-                {
-                    StopMove();
-                    m_AiState = ENUM_AI_State.Attack;
-                    return;
-                }
-
-                if (m_bOnChase)
-                {
-                    float dist = GetTargetDist(m_ChaseTarget);
-                    if (dist < CHASE_CHECK_DIST)
-                        m_AiState = ENUM_AI_State.Idle;
-                    return;
-                }
-
-
-                m_bOnChase = true;
-                MoveTo(m_ChaseTarget.GetPosition());
-                break;
-            case ENUM_AI_State.Attack:
-                if (m_AttackTarget == null || m_AttackTarget.IsKilled() || Targets == null || Targets.Count == 0)
-                {
-                    m_AiState = ENUM_AI_State.Idle;
-                    return;
-                }
-
-                if (!TargetInAttackRange(m_AttackTarget))
-                {
-                    m_ChaseTarget = m_AttackTarget;
-                    m_AiState = ENUM_AI_State.Chase;
-                    return;
-                }
-
-                Attack(m_AttackTarget);
-                break;
-            case ENUM_AI_State.Move:
-                if (Targets !=null && Targets.Count > 0)
-                {
-                    m_AiState = ENUM_AI_State.Idle;
-                    return;
-                }
-
-                if (m_bOnMove)
-                {
-                    float dist = GetTargetDist(m_AttackPosition);
-                    if (dist < MOVE_CHECK_DIST)
-                    {
-                        m_AiState = ENUM_AI_State.Idle;
-                        if (!IsKilled())
-                        {
-                            CanAttackHeart();
-                        }
-                        Killed();
-                    }
-                    return;
-                }
-
-                m_bOnMove = true;
-                MoveTo(m_AttackPosition);
-                break;
-            default:
-                break;
-        }
-    }
-
-
-    void CanAttackHeart()
-    {
-
-    }
-
-
-    void Killed()
-    {
-
-    }
-
-    ICharacter GetNearTarget(List<ICharacter> Targets)
-    {
-        return null;
-    }
-
-    bool TargetInAttackRange(ICharacter theCharacter)
-    {
-        return false;
-    }
-
-
-    void MoveTo(Vector3 pos)
-    {
-
-    }
-
-    void StopMove()
-    {
-
-    }
-
-    float GetTargetDist(ICharacter theCharacter)
-    {
-        return 0.0f;
-    }
-
-    float GetTargetDist(Vector3 pos)
-    {
-        return 0.0f;
-    }
-
-    public abstract void DoPlayHitSound();
-    public abstract void DoShowHitEffect();
 }

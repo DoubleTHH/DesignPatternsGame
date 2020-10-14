@@ -1,22 +1,29 @@
-﻿using System.Collections;
+﻿using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine;
 
-public abstract class IAIState 
+// AI狀態界面
+public abstract class IAIState
 {
-    protected ICharacterAI m_CharacterAI;
+	protected ICharacterAI m_CharacterAI = null; // 角色AI(狀態的擁有者
 
-    public IAIState() { }
+	public IAIState()
+	{ }
 
-    public void SetCharacterAI(ICharacterAI CharacterAI)
-    {
-        m_CharacterAI = CharacterAI;
-    }
+	// 設定CharacterAI的對像
+	public void SetCharacterAI(ICharacterAI CharacterAI)
+	{
+		m_CharacterAI = CharacterAI;
+	}
 
-    public virtual void SetAttackPosition(Vector3 AttackPosition) { }
+	// 設定要攻擊的目標
+	public virtual void SetAttackPosition(Vector3 AttackPosition)
+	{ }
 
-    public abstract void Update(List<ICharacter> Targets);
+	// 更新
+	public abstract void Update(List<ICharacter> Targets);
 
-    public virtual void RemoveTarget(ICharacter Targets) { }
+	// 目標被移除
+	public virtual void RemoveTarget(ICharacter Target)
+	{ }
 
 }

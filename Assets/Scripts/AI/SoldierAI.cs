@@ -1,15 +1,19 @@
-﻿using System.Collections;
+﻿using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine;
 
+// 玩家角色AI
 public class SoldierAI : ICharacterAI
 {
-    public SoldierAI(ICharacter Character) : base (Character)
-    {
-        ChangeAIState(new IdleAIState());
-    }
-    public override bool CanAttackHeart()
-    {
-        return false;
-    }
+	public SoldierAI(ICharacter Character) : base(Character)
+	{
+		// 一開始起始的狀態
+		ChangeAIState(new IdleAIState());
+	}
+
+	// 是否可以攻擊Heart
+	public override bool CanAttackHeart()
+	{
+		return false;
+	}
 }
+

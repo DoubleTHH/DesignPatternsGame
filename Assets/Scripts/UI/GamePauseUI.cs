@@ -1,52 +1,73 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class GamePauseUI : IUserInterface
 {
-    private Text m_EnemyKilledCountText = null;
-    private Text m_SoldierKilledCountText = null;
-    private Text m_StageLvCountText = null;
+	private Text m_EnemyKilledCountText = null;
+	private Text m_SoldierKilledCountText = null;
+	private Text m_StageLvCountText = null;
 
 
+	public GamePauseUI(PBaseDefenseGame PBDGame) : base(PBDGame)
+	{
+		Initialize();
+	}
 
-    public GamePauseUI(PBaseDefenseGame PBDGame) : base(PBDGame)
-    {
-        m_PBDGame = PBDGame;
-    }
-    public override void Hide()
-    {
-        base.Hide();
-    }
+	// 初始
+	public override void Initialize()
+	{
+		m_RootUI = UITool.FindUIGameObject("GamePauseUI");
 
-    public override void Initialize()
-    {
-        base.Initialize();
-    }
+		m_EnemyKilledCountText = UITool.GetUIComponent<Text>(m_RootUI, "EnemyKilledCountText");
+		m_SoldierKilledCountText = UITool.GetUIComponent<Text>(m_RootUI, "SoldierKilledCountText");
+		m_StageLvCountText = UITool.GetUIComponent<Text>(m_RootUI, "StageLvCountText");
 
-    public override void Release()
-    {
-        base.Release();
-    }
+		// Continue
+		Button btn = UITool.GetUIComponent<Button>(m_RootUI, "ContinueBtn");
+		btn.onClick.AddListener(() => OnContinueBtnClick());
 
-    public override void Show()
-    {
-        base.Show();
-    }
+		// Continue
+		btn = UITool.GetUIComponent<Button>(m_RootUI, "ExitBtn");
+		btn.onClick.AddListener(() => OnExitBtnClick());
 
 
-    public override void Update()
-    {
-        base.Update();
-    }
+		Hide();
+	}
 
-    public void ShowGamePause(AchievementSaveData SaveData)
-    {
-        m_EnemyKilledCountText.text = string.Format("当前杀敌数总和： {0}", SaveData.EnemyKilledCount);
-        m_SoldierKilledCountText.text = string.Format("当前我方单位阵亡总和： {0}", SaveData.SoldierKilledCount);
-        m_StageLvCountText.text = string.Format("最高关卡数： {0}", SaveData.StageLv);
+	public override void Hide()
+	{
+		Time.timeScale = 1;
+		base.Hide();
+	}
 
-        Show();
-    }
+	public override void Show()
+	{
+		// 顯示相關訊息
+		Time.timeScale = 0;
+		base.Show();
+	}
+
+	// 顯示暫停
+	public void ShowGamePause(AchievementSaveData SaveData)
+	{
+		m_EnemyKilledCountText.text = string.Format("目前殺敵數總合:{0}", SaveData.EnemyKilledCount);
+		m_SoldierKilledCountText.text = string.Format("目前我方單位陣亡總合:{0}", SaveData.SoldierKilledCount);
+		m_StageLvCountText.text = string.Format("最高關卡數:{0}", SaveData.StageLv);
+		Show();
+	}
+
+	// Continue
+	private void OnContinueBtnClick()
+	{
+		Hide();
+	}
+
+	// Exit
+	private void OnExitBtnClick()
+	{
+		Hide();
+		m_PBDGame.ChangeToMainMenu();
+	}
+
 }

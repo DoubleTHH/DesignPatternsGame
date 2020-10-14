@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
-public class ITrainCost : MonoBehaviour
+// 訓練費用計算
+public abstract class ITrainCost
 {
-
-    public virtual int GetTrainCost(ENUM_Soldier eNUM_Soldier, int Lv, ENUM_Weapon eNUM_Weapon) {
-        return 0;
-    }
+	public abstract int GetTrainCost(ENUM_Soldier emSoldier, int CampLv, ENUM_Weapon emWeapon);
 }

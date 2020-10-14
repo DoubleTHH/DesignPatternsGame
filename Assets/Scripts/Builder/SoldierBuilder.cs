@@ -12,26 +12,19 @@ public class SoldierBuilder : ICharacterBuilder
 {
     private SoldierBuilderParam m_BuildParam = null;
 
-
-    public override void AddAI()
+    public override void SetBuildParam(ICharacterBuildParam theParam)
     {
-        SoldierAI theAI = new SoldierAI(m_BuildParam.NewCharacter);
-        m_BuildParam.NewCharacter.SetAI(theAI);
+        m_BuildParam = theParam as SoldierBuilderParam;
     }
 
-    public override void AddBornEffect()
+    public override void LoadAsset(int GameObjectID)
     {
-        throw new System.NotImplementedException();
-    }
+        IAssetFactory AssetFactory = PBDFactory.GetAssetFactory();
+        GameObject SoldierGameObject = AssetFactory.LoadEnemy(m_BuildParam.NewCharacter.GetAssetName());
+        SoldierGameObject.transform.position = m_BuildParam.SpawnPosition;
+        SoldierGameObject.gameObject.name = string.Format("Soldier[{0}]", GameObjectID);
+        m_BuildParam.NewCharacter.SetGameObject(SoldierGameObject);
 
-    public override void AddCharacterSystem(PBaseDefenseGame PBDGame)
-    {
-        PBDGame.AddSoldier(m_BuildParam.NewCharacter as ISoldier);
-    }
-
-    public override void AddHub()
-    {
-        throw new System.NotImplementedException();
     }
 
     public override void AddOnClickScript()
@@ -41,31 +34,51 @@ public class SoldierBuilder : ICharacterBuilder
 
     }
 
+
     public override void AddWeapon()
     {
         IWeaponFactory WeaponFactory = PBDFactory.GetWeaponFactory();
-        //IWeapon Weapon = WeaponFactory.cr
-    }
+        IWeapon Weapon = WeaponFactory.CreateWeapon(m_BuildParam.emWeapon);
 
-    public override void LoadAsset(int GameObjectID)
-    {
-        IAssetFactory AssetFactory = PBDFactory.GetAssetFactory();
-        //GameObject SoldierGameObject = AssetFactory.load
-
-    }
-
-    public override void SetBuildParam(ICharacterBuildParam theParam)
-    {
-        m_BuildParam = theParam as SoldierBuilderParam;
+        // 設定給角色
+        m_BuildParam.NewCharacter.SetWeapon(Weapon);
     }
 
     public override void SetCharacterAttr()
     {
+        // 取得Enemy的數值
         IAttrFactory theAttrFactory = PBDFactory.GetAttrFactory();
         int AttrID = m_BuildParam.NewCharacter.GetAttrID();
+        SoldierAttr theSoldierAttr = theAttrFactory.GetSoldierAttr(AttrID);
 
-        //SoldierAttr theSoldierAttr = theAttrFactory.GetSoldierAttr(AttrID);
+        // 設定數值的計算策略
+        theSoldierAttr.SetAttStrategy(new SoldierAttrStrategy());
+
+        // 設定給角色
+        m_BuildParam.NewCharacter.SetCharacterAttr(theSoldierAttr);
     }
 
 
+    public override void AddAI()
+    {
+        SoldierAI theAI = new SoldierAI(m_BuildParam.NewCharacter);
+        m_BuildParam.NewCharacter.SetAI(theAI);
+    }
+
+
+    public override void AddCharacterSystem(PBaseDefenseGame PBDGame)
+    {
+        PBDGame.AddSoldier(m_BuildParam.NewCharacter as ISoldier);
+    }
+
+    public override void AddBornEffect()
+    {
+        Debug.Log("未定义出生特效");
+    }
+
+
+    public override void AddHub()
+    {
+        Debug.Log("未定义社区");
+    }
 }

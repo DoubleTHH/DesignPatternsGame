@@ -1,48 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
+// 新兵
 public class SoldierRookie : ISoldier
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	public SoldierRookie()
+	{
+		m_emSoldier = ENUM_Soldier.Rookie;
+		m_AssetName = "Soldier1";
+		m_IconSpriteName = "RookieIcon";
+		m_AttrID = 1;
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	// 播放音效
+	public override void DoPlayKilledSound()
+	{
+		PlaySound("RookieDeath");
+	}
 
-    public void SetGameObject(GameObject go)
-    {
+	// 播放特效
+	public override void DoShowKilledEffect()
+	{
+		PlayEffect("RookieDeadEffect");
+	}
 
-    }
+	// 執行Visitor
+	public override void RunVisitor(ICharacterVisitor Visitor)
+	{
+		Visitor.VisitSoldierRookie(this);
+	}
 
-    public void SetWeapon(IWeapon weapon)
-    {
-
-    }
-
-    public void SetCharacterAttr(SoldierAttr soldierAttr)
-    {
-
-    }
-
-    public void SetAI(SoldierAI soldierAI)
-    {
-
-    }
-
-    public override void DoPlayHitSound()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void DoShowHitEffect()
-    {
-        throw new System.NotImplementedException();
-    }
 }

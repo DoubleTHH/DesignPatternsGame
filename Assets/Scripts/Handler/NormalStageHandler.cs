@@ -1,52 +1,49 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
+// 一般關卡
 public class NormalStageHandler : IStageHandler
 {
+	// 設定分數及關卡資料
+	public NormalStageHandler(IStageScore StateScore, IStageData StageData)
+	{
+		m_StageScore = StateScore;
+		m_StatgeData = StageData;
+	}
 
-    protected IStageData m_StageData = null;
-    public NormalStageHandler (IStageScore StateScore, IStageData StageData)
-    {
-        m_StageScore = StateScore;
-        m_StageData = StageData;
-    }
+	// 確認關卡
+	public override IStageHandler CheckStage()
+	{
+		// 分數是否足夠
+		if (m_StageScore.CheckScore() == false)
+			return this;
 
+		// 已經是最後一關了
+		if (m_NextHandler == null)
+			return this;
 
+		// 確認下一個關卡
+		return m_NextHandler.CheckStage();
+	}
 
-    public override IStageHandler CheckStage()
-    {
-        if (!m_StageScore.CheckScore())
-        {
-            return this;
-        }
+	public override void Update()
+	{
+		m_StatgeData.Update();
+	}
 
+	public override void Reset()
+	{
+		m_StatgeData.Reset();
+	}
 
-        if (m_NextHandler == null)
-        {
-            return this;
-        }
+	public override bool IsFinished()
+	{
+		return m_StatgeData.IsFinished();
+	}
 
-        return m_NextHandler.CheckStage();
-    }
-
-    public override bool IsFinished()
-    {
-        return m_StageData.IsFinished();
-    }
-
-    public override int LoseHeart()
-    {
-        return 1;
-    }
-
-    public override void Reset()
-    {
-        m_StageData.Reset();
-    }
-
-    public override void Update()
-    {
-        m_StageData.Update();
-    }
+	// 損失的生命值
+	public override int LoseHeart()
+	{
+		return 1;
+	}
 }

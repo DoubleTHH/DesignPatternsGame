@@ -1,134 +1,87 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
-
-
+// 成就系統
 public class AchievementSystem : IGameSystem
 {
-    private int m_EnemyKilledCount = 0;
-    private int m_SoldierKilledCount = 0;
-    private int m_StageLv = 0;
-    private bool m_KillOgreEquipRocket = false;
+	private AchievementSaveData m_LastSaveData = null; // 最後一次的存檔資訊
 
-    private AchievementSaveData m_LastSaveData = null;
+	// 記錄的成就項目
+	private int m_EnemyKilledCount = 0;
+	private int m_SoldierKilledCount = 0;
+	private int m_StageLv = 0;
 
+	public AchievementSystem(PBaseDefenseGame PBDGame) : base(PBDGame)
+	{
+		Initialize();
+	}
 
-    public AchievementSystem(PBaseDefenseGame PBDGame) : base(PBDGame)
-    {
-        Initialize();
-    }
+	// 
+	public override void Initialize()
+	{
+		base.Initialize();
 
+		// 註冊相關觀測者
+		m_PBDGame.RegisterGameEvent(ENUM_GameEvent.EnemyKilled, new EnemyKilledObserverAchievement(this));
+		m_PBDGame.RegisterGameEvent(ENUM_GameEvent.SoldierKilled, new SoldierKilledObserverAchievement(this));
+		m_PBDGame.RegisterGameEvent(ENUM_GameEvent.NewStage, new NewStageObserverAchievement(this));
+	}
 
+	// 增加Enemy陣亡數
+	public void AddEnemyKilledCount()
+	{
+		//Debug.Log ("AddEnemyKilledCount");
+		m_EnemyKilledCount++;
+	}
 
-    public override void Initialize()
-    {
-        base.Initialize();
+	// 增加Soldier陣亡數
+	public void AddSoldierKilledCount()
+	{
+		//Debug.Log ("AddSoldierKilledCount");
+		m_SoldierKilledCount++;
+	}
 
+	// 目前關卡
+	public void SetNowStageLevel(int NowStageLevel)
+	{
+		//Debug.Log ("SetNowStageLevel");
+		m_StageLv = NowStageLevel;
+	}
 
-        m_PBDGame.RegisterGameEvent(ENUM_GameEvent.EnemyKilled, new EnemyKilledObserverAchievement(this));
-        m_PBDGame.RegisterGameEvent(ENUM_GameEvent.SoldierKilled, new SoldierKilledObserverAchievement(this));
-        m_PBDGame.RegisterGameEvent(ENUM_GameEvent.NewStage, new NewStageObserverAchievement(this));
-    }
+	// 產生存檔
+	public AchievementSaveData CreateSaveData()
+	{
+		AchievementSaveData SaveData = new AchievementSaveData();
 
-    public void AddEnemyKilledCount()
-    {
-        m_EnemyKilledCount++;
+		// 設定新的高分者
+		SaveData.EnemyKilledCount = Mathf.Max(m_EnemyKilledCount, m_LastSaveData.EnemyKilledCount);
+		SaveData.SoldierKilledCount = Mathf.Max(m_SoldierKilledCount, m_LastSaveData.SoldierKilledCount);
+		SaveData.StageLv = Mathf.Max(m_StageLv, m_LastSaveData.StageLv);
 
-    }
+		return SaveData;
+	}
 
-    public void AddSoldierKilledCount()
-    {
-        m_SoldierKilledCount++;
-    }
+	// 設定舊的存檔
+	public void SetSaveData(AchievementSaveData SaveData)
+	{
+		m_LastSaveData = SaveData;
+	}
 
-    public void SetNowStageLevel(int NowStageLevel)
-    {
-        m_StageLv = NowStageLevel;
-    }
+	// 儲存記錄
+	/*public void SaveData()
+	{
+		PlayerPrefs.SetInt("EnemyKilledCount"	,m_EnemyKilledCount);
+		PlayerPrefs.SetInt("SoldierKilledCount"	,m_SoldierKilledCount);
+		PlayerPrefs.SetInt("StageLv"		 	,m_StageLv);
+	}
 
-    public void NotifyGameEvent(ENUM_GameEvent emGameEvent, System.Object Param1, System.Object Param2)
-    {
-        switch (emGameEvent)
-        {
-            case ENUM_GameEvent.NewStage:
-                break;
-            case ENUM_GameEvent.EnemyKilled:
-                break;
-            case ENUM_GameEvent.SoldierKilled:
-                break;
-            case ENUM_GameEvent.SoldierUpgrate:
-                break;
-            default:
-                break;
-        }
-    }
-
-    public int GetEnmeyKilledCount()
-    {
-        return m_EnemyKilledCount;
-    }
-
-    public int GetSoldierKilledCount()
-    {
-        return m_SoldierKilledCount;
-    }
-
-    public int GetStageLv()
-    {
-        return m_StageLv;
-    }
-
-    public void SetEnemyKilledCount(int iValue)
-    {
-        m_EnemyKilledCount = iValue;
-    }
-
-    public void SetSoldierKilledCount(int iValue)
-    {
-        m_SoldierKilledCount = iValue;
-    }
-
-    public void SetStageLv(int iValue)
-    {
-        m_StageLv = iValue;
-    }
-
-    public void SaveData()
-    {
-        PlayerPrefs.SetInt("EnemyKilledCount", m_EnemyKilledCount);
-        PlayerPrefs.SetInt("SoldierKilledCount", m_SoldierKilledCount);
-        PlayerPrefs.SetInt("StageLv", m_StageLv);
-    }
-
-    public void LoadData()
-    {
-        m_EnemyKilledCount = PlayerPrefs.GetInt("EnemyKilledCount", 0);
-        m_SoldierKilledCount = PlayerPrefs.GetInt("SoldierKilledCount", 0);
-        m_StageLv = PlayerPrefs.GetInt("StageLv", 0);
-    }
-
-    public override void Update()
-    {
-        base.Update();
-    }
+	// 取回記錄
+	public void LoadData()
+	{
+		m_EnemyKilledCount 	= PlayerPrefs.GetInt("EnemyKilledCount",0);
+		m_SoldierKilledCount= PlayerPrefs.GetInt("SoldierKilledCount",0);
+		m_StageLv 			= PlayerPrefs.GetInt("StageLv",0);
+	}*/
 
 
-    public AchievementSaveData CreateSaveData()
-    {
-        AchievementSaveData SaveData = new AchievementSaveData();
-
-        SaveData.EnemyKilledCount = Mathf.Max(m_EnemyKilledCount, m_LastSaveData.EnemyKilledCount);
-        SaveData.SoldierKilledCount = Mathf.Max(m_SoldierKilledCount, m_LastSaveData.SoldierKilledCount);
-        SaveData.StageLv = Mathf.Max(m_StageLv, m_LastSaveData.StageLv);
-
-        return SaveData;
-
-    }
-
-
-    public void SetSaveData(AchievementSaveData SaveData)
-    {
-        m_LastSaveData = SaveData;
-    }
 }

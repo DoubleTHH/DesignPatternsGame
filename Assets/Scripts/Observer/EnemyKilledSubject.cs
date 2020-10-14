@@ -1,30 +1,35 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
+// 敵人單位陣亡
 public class EnemyKilledSubject : IGameEventSubject
 {
-    private int m_KilledCount = 0;
-    private IEnemy m_Enemy = null;
+	private int m_KilledCount = 0;
+	private IEnemy m_Enemy = null;
 
-    public EnemyKilledSubject() { }
+	public EnemyKilledSubject()
+	{ }
 
-    public IEnemy GetEnemy()
-    {
-        return m_Enemy;
-    }
+	// 取得對像
+	public IEnemy GetEnemy()
+	{
+		return m_Enemy;
+	}
 
-    public int GetKilledCount()
-    {
-        return m_KilledCount;
-    }
+	// 目前敵人單位陣亡數
+	public int GetKilledCount()
+	{
+		return m_KilledCount;
+	}
 
-    public override void SetParam(object Param)
-    {
-        base.SetParam(Param);
-        m_Enemy = Param as IEnemy;
-        m_KilledCount++;
+	// 通知敵人單位陣亡
+	public override void SetParam(System.Object Param)
+	{
+		base.SetParam(Param);
+		m_Enemy = Param as IEnemy;
+		m_KilledCount++;
 
-        Notify();
-    }
+		// 通知
+		Notify();
+	}
 }

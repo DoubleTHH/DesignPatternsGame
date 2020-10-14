@@ -1,27 +1,33 @@
-﻿using System;
+﻿using UnityEngine;
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+// 遊戲主迴圈
 public class GameLoop : MonoBehaviour
 {
-    SceneStateController m_SceneStateController = new SceneStateController();
+	// 場景狀態
+	SceneStateController m_SceneStateController = new SceneStateController();
 
-    void Awake()
-    {
-        DontDestroyOnLoad(this);
+	// 
+	void Awake()
+	{
+		// 切換場景不會被刪除
+		GameObject.DontDestroyOnLoad(this.gameObject);
 
-        UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        m_SceneStateController.SetState(new StartState(m_SceneStateController), "");
-    }
+		// 亂數種子
+		UnityEngine.Random.seed = (int)DateTime.Now.Ticks;
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        m_SceneStateController.StateUpdate();
-    }
+	// Use this for initialization
+	void Start()
+	{
+		// 設定起始的場景
+		m_SceneStateController.SetState(new StartState(m_SceneStateController), "");
+	}
+
+	// Update is called once per frame
+	void Update()
+	{
+		m_SceneStateController.StateUpdate();
+	}
 }

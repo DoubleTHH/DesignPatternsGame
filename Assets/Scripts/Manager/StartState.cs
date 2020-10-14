@@ -1,20 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
 
+// 開始狀態
 public class StartState : ISceneState
 {
-    public StartState(SceneStateController Controller) : base(Controller) {
-        this.StateName = G.START_STATE;
-    }
+	public StartState(SceneStateController Controller) : base(Controller)
+	{
+		this.StateName = "StartState";
+	}
 
-    public override void StateBegin()
-    {
-        base.StateBegin();
-    }
+	// 開始
+	public override void StateBegin()
+	{
+		// 可在此進行遊戲資料載入及初始...等
+	}
 
-    public override void StateUpdate()
-    {
-        m_Controller.SetState(new MainMenuState(m_Controller), G.MAIN_MENU_STATE);
-    }
+	// 更新
+	public override void StateUpdate()
+	{
+		// 更換為
+		m_Controller.SetState(new MainMenuState(m_Controller), "MainMenuScene");
+	}
+
 }

@@ -1,22 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
+// 主選單狀態
 public class MainMenuState : ISceneState
 {
-    public MainMenuState(SceneStateController Controller) : base(Controller)
-    {
-        this.StateName = G.MAIN_MENU_STATE;
-    }
+	public MainMenuState(SceneStateController Controller) : base(Controller)
+	{
+		this.StateName = "MainMenuState";
+	}
 
-    public override void StateBegin()
-    {
-        //Button temp = UITool
-    }
+	// 開始
+	public override void StateBegin()
+	{
+		// 取得開始按鈕
+		Button tmpBtn = UITool.GetUIComponent<Button>("StartGameBtn");
+		if (tmpBtn != null)
+			tmpBtn.onClick.AddListener(() => OnStartGameBtnClick(tmpBtn));
+	}
 
-    void OnStartGameBtnClick()
-    {
-        m_Controller.SetState(new BattleState(m_Controller), G.BATTLE_STATE);
-    }
+	// 開始戰鬥
+	private void OnStartGameBtnClick(Button theButton)
+	{
+		//Debug.Log ("OnStartBtnClick:"+theButton.gameObject.name);
+		m_Controller.SetState(new BattleState(m_Controller), "BattleScene");
+	}
+
 }

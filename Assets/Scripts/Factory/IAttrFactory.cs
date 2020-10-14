@@ -1,22 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
-public class IAttrFactory
+// 產生遊戲用數值界面
+public abstract class IAttrFactory
 {
+	// 取得Soldier的數值
+	public abstract SoldierAttr GetSoldierAttr(int AttrID);
 
-    public virtual SoldierAttr GetSoldierAttr(int AttrID)
-    {
-        return null;
-    }
+	// 取得Soldier的數值:有字首字尾的加乘
+	public abstract SoldierAttr GetEliteSoldierAttr(ENUM_AttrDecorator emType, int AttrID, SoldierAttr theSoldierAttr);
 
-    public virtual EnemyAttr GetEnemyAttr(int AttrID)
-    {
-        return null;
-    }
+	// 取得Enemy的數值
+	public abstract EnemyAttr GetEnemyAttr(int AttrID);
 
-    public virtual WeaponAttr GetWeaponAttr(int AttrID)
-    {
-        return null;
-    }
+	// 取得武器的數值
+	public abstract WeaponAttr GetWeaponAttr(int AttrID);
+
+	// 取得加乘用的數值
+	public abstract AdditionalAttr GetAdditionalAttr(int AttrID);
+
 }

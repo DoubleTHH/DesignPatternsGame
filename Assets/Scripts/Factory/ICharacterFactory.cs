@@ -1,28 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
-
-public enum ENUM_Soldier
+// 產生遊戲角色工廠界面
+public abstract class ICharacterFactory
 {
-    Null,
-    Rookie,
-    Sergeant,
-    Captain
+	// 建立Soldier
+	public abstract ISoldier CreateSoldier(ENUM_Soldier emSoldier, ENUM_Weapon emWeapon, int Lv, Vector3 SpawnPosition);
+
+	// 建立Enemy
+	public abstract IEnemy CreateEnemy(ENUM_Enemy emEnemy, ENUM_Weapon emWeapon, Vector3 SpawnPosition, Vector3 AttackPosition);
+
 }
 
-public enum ENUM_Enemy
-{
-    Null,
-    Elf,
-    Troll,
-    Ogre
-}
-public abstract class ICharacterFactory 
-{
-    public abstract ISoldier CreateSoldier(ENUM_Soldier emSoldier, ENUM_Weapon emWeapon, int Lv, Vector3 SpawnPosition);
-
-    public abstract IEnemy CreateEnemy(ENUM_Enemy emEnemy, ENUM_Weapon emWeapon, Vector3 SpawnPosition, Vector3 AttackPosition);
-
-
-}
